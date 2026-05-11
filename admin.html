@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>QR-Verwaltung</title>
+  <link rel="stylesheet" href="./style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+  <script defer src="./js/admin.js"></script>
+</head>
+<body>
+  <main class="shell">
+    <section class="card">
+      <div class="row" style="justify-content:space-between; align-items:flex-start;">
+        <div>
+          <div class="badge">Admin</div>
+          <h1>QR-Codes verwalten</h1>
+          <p class="muted">
+            Codes anlegen, Ziel-URLs ändern, löschen und die fertigen Kurzlinks kopieren.
+          </p>
+        </div>
+
+        <div class="toolbar">
+          <button class="button secondary" id="reload">Neu laden</button>
+          <button class="button secondary" id="exportJson">Export JSON</button>
+        </div>
+      </div>
+
+      <div id="message" class="notice">Bereit.</div>
+
+      <div class="grid" style="margin-top:20px;">
+        <section class="stack">
+          <div class="card" style="padding:20px; background:rgba(255,255,255,.03);">
+            <h2>Repository-Zugang</h2>
+
+            <div class="stack">
+              <div class="row">
+                <div class="field" style="flex:1;">
+                  <label for="owner">Owner</label>
+                  <input id="owner" placeholder="dein-name" />
+                </div>
+                <div class="field" style="flex:1;">
+                  <label for="repo">Repo</label>
+                  <input id="repo" placeholder="dein-repo" />
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="field" style="flex:1;">
+                  <label for="branch">Branch</label>
+                  <input id="branch" placeholder="main" />
+                </div>
+                <div class="field" style="flex:1;">
+                  <label for="token">GitHub Token</label>
+                  <input id="token" type="password" placeholder="Token mit Contents-Recht" />
+                </div>
+              </div>
+
+              <label class="row" style="gap:10px; align-items:center;">
+                <input id="rememberToken" type="checkbox" style="width:auto;" />
+                <span>Token im Browser speichern</span>
+              </label>
+
+              <div class="toolbar">
+                <button class="button secondary" id="savePrefs">Einstellungen speichern</button>
+              </div>
+
+              <div class="notice small">
+                Für den Contents-Endpunkt braucht ein Fine-Grained Token die Repository-Berechtigung
+                <code class="k">Contents: write</code>; klassische PATs benötigen <code class="k">repo</code>. 2
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="padding:20px; background:rgba(255,255,255,.03);">
+            <h2>Eintrag anlegen / ändern</h2>
+
+            <div class="stack">
+              <div class="field">
+                <label for="code">Shortcode</label>
+                <input id="code" placeholder="z. B. qr123" />
+              </div>
+
+              <div class="field">
+                <label for="url">Ziel-URL</label>
+                <input id="url" placeholder="https://example.com/seite" />
+              </div>
+
+              <div class="field">
+                <label for="shortUrl">Kurzlink</label>
+                <input id="shortUrl" readonly />
+              </div>
+
+              <div class="toolbar">
+                <button class="button secondary" id="generateCode">Code erzeugen</button>
+                <button class="button secondary" id="copyShortUrl">Kurzlink kopieren</button>
+                <button class="button" id="saveEntry">Speichern</button>
+              </div>
+
+              <div class="preview-box">
+                <div class="muted small">QR-Vorschau</div>
+                <div class="qr-wrap"><div id="qrHolder"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="notice small">
+            Der Kurzlink wird von GitHub Pages ausgeliefert. GitHub Pages ist statisches Hosting direkt aus dem Repository. 3
+          </div>
+        </section>
+
+        <section class="stack">
+          <div class="card" style="padding:20px; background:rgba(255,255,255,.03);">
+            <h2>Vorhandene Codes</h2>
+            <div style="overflow:auto;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Code</th>
+                    <th>Ziel</th>
+                    <th>Aktionen</th>
+                  </tr>
+                </thead>
+                <tbody id="tableBody">
+                  <tr><td colspan="3" class="muted">Lade …</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card" style="padding:20px; background:rgba(255,255,255,.03);">
+            <h2>Import</h2>
+            <p class="muted small">JSON-Datei laden, lokal bearbeiten und danach wieder ins Repository speichern.</p>
+            <input id="importFile" type="file" accept="application/json" />
+          </div>
+
+          <div class="notice small">
+            Tipp: Der finale QR-Code enthält einfach die Zielseite der Short-URL, also zum Beispiel
+            <code class="k">...?qrid=abc123</code>.
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+</body>
+  </html>
